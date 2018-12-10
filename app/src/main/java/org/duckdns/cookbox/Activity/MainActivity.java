@@ -1,30 +1,22 @@
 package org.duckdns.cookbox.Activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toolbar;
 
-import org.duckdns.cookbox.Network.CookboxApi;
-import org.duckdns.cookbox.Model.Recipe;
+import org.duckdns.cookbox.Fragment.RecipeListFragment;
 import org.duckdns.cookbox.R;
 
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends FragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
@@ -32,25 +24,28 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        /*
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        */
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        RecipeListFragment newFragment = new RecipeListFragment();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(
+                R.id.content_frame,
+                newFragment
+        );
+        transaction.commit();
     }
 
     @Override
@@ -92,7 +87,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            connectAndGetApiData();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -109,31 +103,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    // This method create an instance of Retrofit
-    // set the base url
-    public void connectAndGetApiData(){
-
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:8000/api/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        CookboxApi cbApi = retrofit.create(CookboxApi.class);
-        Call<Recipe> call = cbApi.getRecipe(1);
-        call.enqueue(new Callback<Recipe>() {
-            @Override
-            public void onResponse(Call<Recipe> call, Response<Recipe> response) {
-                Recipe recipe = response.body();
-                Log.e("YAYAYAYYAAY", recipe.name);
-            }
-            @Override
-            public void onFailure(Call<Recipe> call, Throwable throwable) {
-                Log.e("HAHAHAHAHHAHA", throwable.toString());
-            }
-        });
-    }
-
-    Retrofit retrofit = null;
 }
