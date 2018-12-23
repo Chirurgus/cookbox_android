@@ -26,29 +26,29 @@ public class Recipe {
     public List<Tag> tags;
     public List<Note> notes;
 
-    private class IngredientGroup {
+    public class IngredientGroup {
         public String name;
         public List<Ingredient> ingredients;
     }
 
-    private class Ingredient {
+    public class Ingredient {
         public String unit;
-        public String quantity;
+        public float quantity;
         public String description;
         public String usda_code;
         public List<Note> notes;
     }
 
-    private class Instruction {
+    public class Instruction {
         public String instruction;
         public List<Note> notes;
     }
 
-    private class Tag {
+    public class Tag {
         public String tag;
     }
 
-    private class Note {
+    public class Note {
         public String text;
         public String image;
     }

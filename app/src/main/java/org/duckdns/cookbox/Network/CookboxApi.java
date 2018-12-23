@@ -14,9 +14,10 @@ public interface CookboxApi {
     Call<List<Recipe>> getAllRecipes(@Query("fields") String fields);
 
     @GET("recipes/{id}")
+    Call<Recipe> getRecipe(@Path("id") long id);
+
+    @GET("recipes/{id}")
     Call<Recipe> getRecipe(@Path("id") long id,
                            @Query("fields") String fields);
 
-    @GET("recipes/?fields=id")
-    Call<Long> getIds();
 }

@@ -83,6 +83,15 @@ public class RecipeListFragment extends ListFragment {
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                RecipeFragment fragment = new RecipeFragment();
+                Bundle args = new Bundle();
+                args.putLong("id", recipeList.get(pos).id);
+                fragment.setArguments(args);
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, fragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }
